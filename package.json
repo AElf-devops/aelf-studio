@@ -4,7 +4,6 @@
   "description": "Build aelf Smart Contracts",
   "publisher": "aelf-developers",
   "version": "0.1.0",
-  "type": "module",
   "engines": {
     "vscode": "^1.93.0"
   },
