@@ -42,22 +42,24 @@ export const test = (context: vscode.ExtensionContext) =>
     // Get the folder of the selected .csproj file
     const csprojFolderUri = vscode.Uri.joinPath(selectedCsprojUri, "..");
 
-    try {
-      // Check if the environment is desktop
-      if (vscode.env.uiKind === vscode.UIKind.Desktop) {
-        // Code for desktop environment
+    if (vscode.env.uiKind === vscode.UIKind.Desktop) {
+      // Code for desktop environment
+      vscode.window
+        .showInformationMessage(
+          "It seems you are running VSCode Desktop, do you wish to run 'dotnet test' locally instead?",
+          "Yes",
+          "No"
+        )
+        .then((response) => {
+          if (response === "Yes") {
+            vscode.window.showInformationMessage(
+              "Please open a terminal and run 'dotnet test' in the project folder."
+            );
 
-        const terminal = vscode.window.createTerminal();
-        terminal.sendText(`dotnet test ${csprojFolderUri.fsPath}`);
-        terminal.show();
-
-        vscode.window.showInformationMessage(
-          "Running the test, please wait..."
-        );
-
-        return;
-      }
-    } catch (error) {}
+            return;
+          }
+        });
+    }
 
     const parentFolderUri = vscode.Uri.joinPath(csprojFolderUri, "..");
 

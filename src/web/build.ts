@@ -42,40 +42,24 @@ export const build = (context: vscode.ExtensionContext) =>
     // Get the folder of the selected .csproj file
     const csprojFolderUri = vscode.Uri.joinPath(selectedCsprojUri, "..");
 
-    try {
-      // Check if the environment is desktop
-      if (vscode.env.uiKind === vscode.UIKind.Desktop) {
-        // Code for desktop environment
+    if (vscode.env.uiKind === vscode.UIKind.Desktop) {
+      // Code for desktop environment
+      vscode.window
+        .showInformationMessage(
+          "It seems you are running VSCode Desktop, do you wish to run 'dotnet build' locally instead?",
+          "Yes",
+          "No"
+        )
+        .then((response) => {
+          if (response === "Yes") {
+            vscode.window.showInformationMessage(
+              "Please open a terminal and run 'dotnet build' in the project folder."
+            );
 
-        const terminal = vscode.window.createTerminal();
-        terminal.sendText(`dotnet build ${csprojFolderUri.fsPath}`);
-        terminal.show();
-
-        vscode.window.showInformationMessage(
-          "Building the contract, please wait..."
-        );
-
-        // Watch the folder for the appearance of the .dll.patched file
-        const watcher = vscode.workspace.createFileSystemWatcher(
-          new vscode.RelativePattern(csprojFolderUri, "*.dll.patched")
-        );
-
-        // Register a callback function to be executed when the file appears
-        watcher.onDidCreate(async (uri) => {
-          // Stop watching the folder
-          watcher.dispose();
-
-          // Read the content of the .dll.patched file
-          const document = await vscode.workspace.openTextDocument(uri);
-          const content = document.getText();
-
-          // Store the content in the global state
-          context.globalState.update("response", content);
+            return;
+          }
         });
-
-        return;
-      }
-    } catch (error) {}
+    }
 
     // Find all files within the same folder as the .csproj file and its subfolders
     const fileUris = await vscode.workspace.findFiles(
