@@ -33,7 +33,7 @@ export const build = (context: vscode.ExtensionContext) =>
     });
 
     if (!selectedCsproj) {
-      vscode.window.showInformationMessage("No .csproj file selected.");
+      vscode.window.showErrorMessage("No .csproj file selected.");
       return;
     }
 
@@ -41,6 +41,18 @@ export const build = (context: vscode.ExtensionContext) =>
 
     // Get the folder of the selected .csproj file
     const csprojFolderUri = vscode.Uri.joinPath(selectedCsprojUri, "..");
+
+    try {
+      const terminal = vscode.window.createTerminal();
+      terminal.sendText(`dotnet build ${csprojFolderUri.fsPath}`);
+      terminal.show();
+
+      vscode.window.showInformationMessage(
+        "Building the contract, please wait..."
+      );
+
+      return;
+    } catch (error) {}
 
     // Find all files within the same folder as the .csproj file and its subfolders
     const fileUris = await vscode.workspace.findFiles(
