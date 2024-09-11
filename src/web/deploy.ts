@@ -55,31 +55,21 @@ export const deploy = (context: vscode.ExtensionContext) =>
             code: responseContent,
           });
 
-        // Set the transaction ID in global state
-        context.globalState.update("transactionId", response.TransactionId);
-
         try {
-          let result = await aelf.chain.getTxResult(response.TransactionId);
+          await aelf.chain.getTxResult(response.TransactionId);
 
-          if (result.Status === "MINED") {
-            // Show message with transactionId and link to aelf Explorer
-            vscode.window
-              .showInformationMessage(
-                `Transaction ID: ${response.TransactionId}`,
-                "View on aelf Explorer"
-              )
-              .then((selection) => {
-                if (selection === "View on aelf Explorer") {
-                  const transactionId = response.TransactionId;
-                  if (transactionId) {
-                    const explorerUrl = `https://explorer-test-side02.aelf.io/tx/${transactionId}`;
-                    vscode.env.openExternal(vscode.Uri.parse(explorerUrl));
-                  } else {
-                    vscode.window.showErrorMessage("Transaction ID not found.");
-                  }
-                }
-              });
-          }
+          // Set the transaction ID in global state
+          context.globalState.update("transactionId", response.TransactionId);
+
+          vscode.window
+            .showInformationMessage("Transaction pending.", "Check status")
+            .then((selection) => {
+              if (selection === "Check status") {
+                vscode.commands.executeCommand(
+                  "aelf-contract-build.checkStatus"
+                );
+              }
+            });
         } catch (err) {
           let result = err as { Status?: string; Error?: string };
 

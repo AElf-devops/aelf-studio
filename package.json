@@ -16,15 +16,19 @@
     "commands": [
       {
         "command": "aelf-contract-build.build",
-        "title": "aelf-contract-build: Build aelf smart contract..."
+        "title": "aelf-contract: Build aelf smart contract..."
       },
       {
         "command": "aelf-contract-build.deploy",
-        "title": "aelf-contract-build: Deploy aelf smart contract..."
+        "title": "aelf-contract: Deploy aelf smart contract..."
       },
       {
         "command": "aelf-contract-build.faucet",
-        "title": "aelf-contract-build: Get testnet tokens from faucet..."
+        "title": "aelf-contract: Get testnet tokens from faucet..."
+      },
+      {
+        "command": "aelf-contract-build.checkStatus",
+        "title": "aelf-contract: Check status of transaction..."
       }
     ]
   },

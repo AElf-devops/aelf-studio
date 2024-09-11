@@ -111,7 +111,9 @@ export const build = (context: vscode.ExtensionContext) =>
           }
         } catch (error) {
           if (error instanceof Error) {
-            vscode.window.showErrorMessage(`Error: ${error.message}`);
+            vscode.window.showErrorMessage(
+              `Error: There was a problem building your contract, please check your code.`
+            );
           }
         }
       }
