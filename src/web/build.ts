@@ -51,6 +51,24 @@ export const build = (context: vscode.ExtensionContext) =>
         "Building the contract, please wait..."
       );
 
+      // Watch the folder for the appearance of the .dll.patched file
+      const watcher = vscode.workspace.createFileSystemWatcher(
+        new vscode.RelativePattern(csprojFolderUri, "*.dll.patched")
+      );
+
+      // Register a callback function to be executed when the file appears
+      watcher.onDidCreate(async (uri) => {
+        // Stop watching the folder
+        watcher.dispose();
+
+        // Read the content of the .dll.patched file
+        const document = await vscode.workspace.openTextDocument(uri);
+        const content = document.getText();
+
+        // Store the content in the global state
+        context.globalState.update("response", content);
+      });
+
       return;
     } catch (error) {}
 
