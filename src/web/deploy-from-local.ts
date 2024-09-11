@@ -54,6 +54,21 @@ export const deployFromLocal = (context: vscode.ExtensionContext) =>
 
       context.globalState.update("response", responseContent);
 
-      await vscode.commands.executeCommand("aelf-contract-build.deploy");
+      let privateKey: string = context.globalState.get("privateKey") || "";
+
+      if (!privateKey) {
+        vscode.window
+          .showErrorMessage(
+            "Please claim testnet tokens first.",
+            "Claim testnet tokens"
+          )
+          .then((selection) => {
+            if (selection === "Claim testnet tokens") {
+              vscode.commands.executeCommand("aelf-contract-build.faucet");
+            }
+          });
+      } else {
+        await vscode.commands.executeCommand("aelf-contract-build.deploy");
+      }
     }
   );
