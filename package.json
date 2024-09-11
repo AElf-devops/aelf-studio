@@ -20,6 +20,11 @@
         "category": "aelf"
       },
       {
+        "command": "aelf-contract-build.test",
+        "title": "Test aelf smart contract...",
+        "category": "aelf"
+      },
+      {
         "command": "aelf-contract-build.deploy",
         "title": "Deploy aelf smart contract...",
         "category": "aelf"
