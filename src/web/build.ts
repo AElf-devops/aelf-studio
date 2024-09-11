@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import { zipSync, strToU8 } from "fflate";
+import { showProgress } from "./progress";
 
 export const build = (context: vscode.ExtensionContext) =>
   vscode.commands.registerCommand("aelf-contract-build.build", async () => {
@@ -82,38 +83,17 @@ export const build = (context: vscode.ExtensionContext) =>
     // Define the endpoint where the POST request will be sent
     const endpoint = "https://playground-next.test.aelf.dev/playground/build"; // Replace with your actual endpoint
 
-    // Show progress indicator during the fetch operation
-    vscode.window.withProgress(
-      {
-        location: vscode.ProgressLocation.Notification,
-        title: "Building...",
-        cancellable: false,
-      },
-      async (progress) => {
-        progress.report({ increment: 0, message: "Processing..." });
+    showProgress("Building...", async () => {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        body: formData,
+      });
 
-        try {
-          // Send the POST request using fetch
-          const response = await fetch(endpoint, {
-            method: "POST",
-            body: formData,
-          });
-
-          if (response.ok) {
-            // Save the response as a file
-            const responseContent = await response.text();
-            context.globalState.update("response", responseContent);
-            vscode.window.showInformationMessage("Build succeeded!");
-          } else {
-            vscode.window.showErrorMessage(
-              `Build failed: ${response.statusText}`
-            );
-          }
-        } catch (error) {
-          if (error instanceof Error) {
-            vscode.window.showErrorMessage(`Build error: ${error.message}`);
-          }
-        }
+      if (response.ok) {
+        const responseContent = await response.text();
+        context.globalState.update("response", responseContent);
+      } else {
+        throw new Error(response.statusText);
       }
-    );
+    }, "Build succeeded!");
   });

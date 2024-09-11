@@ -1,9 +1,6 @@
 import * as vscode from "vscode";
 import AElf from "aelf-sdk";
-
-const aelf = new AElf(
-  new AElf.providers.HttpProvider("https://tdvw-test-node.aelf.io")
-);
+import { showProgress } from "./progress";
 
 export const faucet = (context: vscode.ExtensionContext) =>
   vscode.commands.registerCommand("aelf-contract-build.faucet", async () => {
@@ -16,42 +13,17 @@ export const faucet = (context: vscode.ExtensionContext) =>
       privateKey = newWallet.privateKey;
       context.globalState.update("privateKey", privateKey);
 
-      // Show progress of fetch
-      vscode.window.withProgress(
-        {
-          location: vscode.ProgressLocation.Notification,
-          title: "Claiming testnet tokens...",
-          cancellable: false,
-        },
-        async (progress) => {
-          try {
-            let increment = 0;
-            const interval = setInterval(() => {
-              increment++;
-              progress.report({ increment });
-            }, 1000);
+      showProgress("Claiming testnet tokens...", async () => {
 
-            // Send the POST request using fetch
-            const res = await fetch(
-              `https://faucet.aelf.dev/api/claim?walletAddress=${newWallet.address}`,
-              { method: "POST" }
-            );
+        const res = await fetch(
+          `https://faucet.aelf.dev/api/claim?walletAddress=${newWallet.address}`,
+          { method: "POST" }
+        );
 
-            await res.json();
-            clearInterval(interval);
+        await res.json();
 
-            vscode.window.showInformationMessage(
-              `Testnet tokens claimed successfully.`
-            );
-          } catch (error) {
-            if (error instanceof Error) {
-              vscode.window.showErrorMessage(
-                `Token claim error: ${error.message}`
-              );
-            }
-          }
-        }
-      );
+      }, "Testnet tokens claimed successfully.");
+
     } else {
       vscode.window
         .showErrorMessage(
