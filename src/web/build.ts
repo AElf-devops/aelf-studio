@@ -99,14 +99,13 @@ export const build = (context: vscode.ExtensionContext) =>
             const responseContent = await response.text();
             context.globalState.update("response", responseContent);
 
-            const selection = await vscode.window.showInformationMessage(
-              "Build successful.",
-              "Deploy"
-            );
-
-            if (selection === "Deploy") {
-              vscode.commands.executeCommand("aelf-contract-build.deploy");
-            }
+            vscode.window
+              .showInformationMessage("Build successful.", "Deploy")
+              .then((selection) => {
+                if (selection === "Deploy") {
+                  vscode.commands.executeCommand("aelf-contract-build.deploy");
+                }
+              });
           } else {
             throw new Error(response.statusText);
           }

@@ -26,29 +26,34 @@ export const faucet = (context: vscode.ExtensionContext) =>
 
           await res.json();
 
-          const selection = await vscode.window.showInformationMessage(
-            "Testnet tokens claimed successfully.",
-            "Deploy"
-          );
-          if (selection === "Deploy") {
-            vscode.commands.executeCommand("aelf-contract-build.deploy");
-          }
+          vscode.window
+            .showInformationMessage(
+              "Testnet tokens claimed successfully.",
+              "Deploy"
+            )
+            .then((selection) => {
+              if (selection === "Deploy") {
+                vscode.commands.executeCommand("aelf-contract-build.deploy");
+              }
+            });
         }
       );
     } else {
-      const selection = await vscode.window.showErrorMessage(
-        `You have already claimed testnet tokens with this wallet.`,
-        "Deploy",
-        "Reset Wallet"
-      );
+      vscode.window
+        .showErrorMessage(
+          `You have already claimed testnet tokens with this wallet.`,
+          "Deploy",
+          "Reset Wallet"
+        )
+        .then((selection) => {
+          if (selection === "Reset Wallet") {
+            context.globalState.update("privateKey", "");
+            vscode.window.showInformationMessage("Wallet reset.");
+          }
 
-      if (selection === "Reset Wallet") {
-        context.globalState.update("privateKey", "");
-        vscode.window.showInformationMessage("Wallet reset.");
-      }
-
-      if (selection === "Deploy") {
-        vscode.commands.executeCommand("aelf-contract-build.deploy");
-      }
+          if (selection === "Deploy") {
+            vscode.commands.executeCommand("aelf-contract-build.deploy");
+          }
+        });
     }
   });

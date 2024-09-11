@@ -20,16 +20,16 @@ export const deploy = (context: vscode.ExtensionContext) =>
     let privateKey: string = context.globalState.get("privateKey") || "";
 
     if (!privateKey) {
-      const selection = await vscode.window.showErrorMessage(
-        "Please claim testnet tokens first.",
-        "Claim testnet tokens"
-      );
-
-      if (selection === "Claim testnet tokens") {
-        vscode.commands.executeCommand("aelf-contract-build.faucet");
-      }
-
-      return;
+      vscode.window
+        .showErrorMessage(
+          "Please claim testnet tokens first.",
+          "Claim testnet tokens"
+        )
+        .then((selection) => {
+          if (selection === "Claim testnet tokens") {
+            vscode.commands.executeCommand("aelf-contract-build.faucet");
+          }
+        });
     }
 
     const wallet = AElf.wallet.getWalletByPrivateKey(privateKey);
@@ -63,20 +63,22 @@ export const deploy = (context: vscode.ExtensionContext) =>
 
           if (result.Status === "MINED") {
             // Show message with transactionId and link to aelf Explorer
-            const selection = await vscode.window.showInformationMessage(
-              `Transaction ID: ${response.TransactionId}`,
-              "View on aelf Explorer"
-            );
-
-            if (selection === "View on aelf Explorer") {
-              const transactionId = response.TransactionId;
-              if (transactionId) {
-                const explorerUrl = `https://explorer-test-side02.aelf.io/tx/${transactionId}`;
-                vscode.env.openExternal(vscode.Uri.parse(explorerUrl));
-              } else {
-                vscode.window.showErrorMessage("Transaction ID not found.");
-              }
-            }
+            vscode.window
+              .showInformationMessage(
+                `Transaction ID: ${response.TransactionId}`,
+                "View on aelf Explorer"
+              )
+              .then((selection) => {
+                if (selection === "View on aelf Explorer") {
+                  const transactionId = response.TransactionId;
+                  if (transactionId) {
+                    const explorerUrl = `https://explorer-test-side02.aelf.io/tx/${transactionId}`;
+                    vscode.env.openExternal(vscode.Uri.parse(explorerUrl));
+                  } else {
+                    vscode.window.showErrorMessage("Transaction ID not found.");
+                  }
+                }
+              });
           }
         } catch (err) {
           let result = err as { Status?: string; Error?: string };
