@@ -16,16 +16,21 @@ export const faucet = (context: vscode.ExtensionContext) =>
       privateKey = newWallet.privateKey;
       context.globalState.update("privateKey", privateKey);
 
+      // Show progress of fetch
       vscode.window.withProgress(
         {
           location: vscode.ProgressLocation.Notification,
-          title: "Getting testnet tokens...",
+          title: "Claiming testnet tokens...",
           cancellable: false,
         },
         async (progress) => {
-          progress.report({ increment: 0, message: "Processing..." });
-
           try {
+            let increment = 0;
+            const interval = setInterval(() => {
+              increment++;
+              progress.report({ increment });
+            }, 1000);
+
             // Send the POST request using fetch
             const res = await fetch(
               `https://faucet.aelf.dev/api/claim?walletAddress=${newWallet.address}`,
@@ -33,8 +38,11 @@ export const faucet = (context: vscode.ExtensionContext) =>
             );
 
             await res.json();
+            clearInterval(interval);
 
-            progress.report({ increment: 100, message: "Tokens requested!" });
+            vscode.window.showInformationMessage(
+              `Testnet tokens claimed successfully.`
+            );
           } catch (error) {
             if (error instanceof Error) {
               vscode.window.showErrorMessage(
