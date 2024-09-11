@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 import AElf from "aelf-sdk";
-import { showProgress } from "./progress";
 
 export const faucet = (context: vscode.ExtensionContext) =>
   vscode.commands.registerCommand("aelf-contract-build.faucet", async () => {
@@ -13,28 +12,43 @@ export const faucet = (context: vscode.ExtensionContext) =>
       privateKey = newWallet.privateKey;
       context.globalState.update("privateKey", privateKey);
 
-      showProgress("Claiming testnet tokens...", async () => {
+      vscode.window.withProgress(
+        {
+          location: vscode.ProgressLocation.Notification,
+          title: "Claiming testnet tokens...",
+          cancellable: false,
+        },
+        async () => {
+          const res = await fetch(
+            `https://faucet.aelf.dev/api/claim?walletAddress=${newWallet.address}`,
+            { method: "POST" }
+          );
 
-        const res = await fetch(
-          `https://faucet.aelf.dev/api/claim?walletAddress=${newWallet.address}`,
-          { method: "POST" }
-        );
+          await res.json();
 
-        await res.json();
-
-      }, "Testnet tokens claimed successfully.");
-
-    } else {
-      vscode.window
-        .showErrorMessage(
-          `You have already claimed testnet tokens with this wallet.`,
-          "Reset Wallet"
-        )
-        .then((selection) => {
-          if (selection === "Reset Wallet") {
-            context.globalState.update("privateKey", "");
-            vscode.window.showInformationMessage("Wallet reset.");
+          const selection = await vscode.window.showInformationMessage(
+            "Testnet tokens claimed successfully.",
+            "Deploy"
+          );
+          if (selection === "Deploy") {
+            vscode.commands.executeCommand("aelf-contract-build.deploy");
           }
-        });
+        }
+      );
+    } else {
+      const selection = await vscode.window.showErrorMessage(
+        `You have already claimed testnet tokens with this wallet.`,
+        "Deploy",
+        "Reset Wallet"
+      );
+
+      if (selection === "Reset Wallet") {
+        context.globalState.update("privateKey", "");
+        vscode.window.showInformationMessage("Wallet reset.");
+      }
+
+      if (selection === "Deploy") {
+        vscode.commands.executeCommand("aelf-contract-build.deploy");
+      }
     }
   });

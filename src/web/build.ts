@@ -2,7 +2,6 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import { zipSync, strToU8 } from "fflate";
-import { showProgress } from "./progress";
 
 export const build = (context: vscode.ExtensionContext) =>
   vscode.commands.registerCommand("aelf-contract-build.build", async () => {
@@ -83,17 +82,39 @@ export const build = (context: vscode.ExtensionContext) =>
     // Define the endpoint where the POST request will be sent
     const endpoint = "https://playground-next.test.aelf.dev/playground/build"; // Replace with your actual endpoint
 
-    showProgress("Building...", async () => {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        body: formData,
-      });
+    vscode.window.withProgress(
+      {
+        location: vscode.ProgressLocation.Notification,
+        title: "Building...",
+        cancellable: false,
+      },
+      async () => {
+        try {
+          const response = await fetch(endpoint, {
+            method: "POST",
+            body: formData,
+          });
 
-      if (response.ok) {
-        const responseContent = await response.text();
-        context.globalState.update("response", responseContent);
-      } else {
-        throw new Error(response.statusText);
+          if (response.ok) {
+            const responseContent = await response.text();
+            context.globalState.update("response", responseContent);
+
+            const selection = await vscode.window.showInformationMessage(
+              "Build successful.",
+              "Deploy"
+            );
+
+            if (selection === "Deploy") {
+              vscode.commands.executeCommand("aelf-contract-build.deploy");
+            }
+          } else {
+            throw new Error(response.statusText);
+          }
+        } catch (error) {
+          if (error instanceof Error) {
+            vscode.window.showErrorMessage(`Error: ${error.message}`);
+          }
+        }
       }
-    }, "Build succeeded!");
+    );
   });
