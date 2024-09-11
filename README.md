@@ -47,7 +47,3 @@ To install the extension, follow these steps:
 2. Go to the Extensions view by clicking on the Extensions icon in the Activity Bar on the side of the window.
 3. Search for `aelf-contract-build`.
 4. Click Install.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
