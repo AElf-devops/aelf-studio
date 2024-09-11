@@ -6,6 +6,7 @@ import { build } from "./build";
 import { faucet } from "./faucet";
 import { checkStatus } from "./check-status";
 import { test } from "./test";
+import { deployFromLocal } from "./deploy-from-local";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -20,6 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
     build(context),
     test(context),
     deploy(context),
+    deployFromLocal(context),
     faucet(context),
     checkStatus(context),
   ];

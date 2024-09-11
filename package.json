@@ -30,6 +30,11 @@
         "category": "aelf"
       },
       {
+        "command": "aelf-contract-build.deployFromLocal",
+        "title": "Deploy aelf smart contract from a local dll...",
+        "category": "aelf"
+      },
+      {
         "command": "aelf-contract-build.faucet",
         "title": "Get testnet tokens from faucet...",
         "category": "aelf"
