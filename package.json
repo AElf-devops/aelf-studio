@@ -17,6 +17,14 @@
       {
         "command": "aelf-contract-build.build",
         "title": "aelf-contract-build: Build aelf smart contract..."
+      },
+      {
+        "command": "aelf-contract-build.deploy",
+        "title": "aelf-contract-build: Deploy aelf smart contract..."
+      },
+      {
+        "command": "aelf-contract-build.faucet",
+        "title": "aelf-contract-build: Get testnet tokens from faucet..."
       }
     ]
   },
@@ -57,6 +65,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "aelf-sdk": "^3.4.15",
     "fflate": "^0.8.2"
   }
 }
