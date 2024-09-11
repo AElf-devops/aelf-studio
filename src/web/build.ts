@@ -43,33 +43,38 @@ export const build = (context: vscode.ExtensionContext) =>
     const csprojFolderUri = vscode.Uri.joinPath(selectedCsprojUri, "..");
 
     try {
-      const terminal = vscode.window.createTerminal();
-      terminal.sendText(`dotnet build ${csprojFolderUri.fsPath}`);
-      terminal.show();
+      // Check if the environment is desktop
+      if (vscode.env.uiKind === vscode.UIKind.Desktop) {
+        // Code for desktop environment
 
-      vscode.window.showInformationMessage(
-        "Building the contract, please wait..."
-      );
+        const terminal = vscode.window.createTerminal();
+        terminal.sendText(`dotnet build ${csprojFolderUri.fsPath}`);
+        terminal.show();
 
-      // Watch the folder for the appearance of the .dll.patched file
-      const watcher = vscode.workspace.createFileSystemWatcher(
-        new vscode.RelativePattern(csprojFolderUri, "*.dll.patched")
-      );
+        vscode.window.showInformationMessage(
+          "Building the contract, please wait..."
+        );
 
-      // Register a callback function to be executed when the file appears
-      watcher.onDidCreate(async (uri) => {
-        // Stop watching the folder
-        watcher.dispose();
+        // Watch the folder for the appearance of the .dll.patched file
+        const watcher = vscode.workspace.createFileSystemWatcher(
+          new vscode.RelativePattern(csprojFolderUri, "*.dll.patched")
+        );
 
-        // Read the content of the .dll.patched file
-        const document = await vscode.workspace.openTextDocument(uri);
-        const content = document.getText();
+        // Register a callback function to be executed when the file appears
+        watcher.onDidCreate(async (uri) => {
+          // Stop watching the folder
+          watcher.dispose();
 
-        // Store the content in the global state
-        context.globalState.update("response", content);
-      });
+          // Read the content of the .dll.patched file
+          const document = await vscode.workspace.openTextDocument(uri);
+          const content = document.getText();
 
-      return;
+          // Store the content in the global state
+          context.globalState.update("response", content);
+        });
+
+        return;
+      }
     } catch (error) {}
 
     // Find all files within the same folder as the .csproj file and its subfolders
