@@ -31,16 +31,16 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(statusBarItem);
 
   const commands = [
-    build(context),
-    test(context),
-    deploy(context),
-    deployFromLocal(context),
-    faucet(context),
-    checkStatus(context),
-    menu(context),
+    build,
+    test,
+    deploy,
+    deployFromLocal,
+    faucet,
+    checkStatus,
+    menu,
   ];
 
-  context.subscriptions.push(...commands);
+  context.subscriptions.push(...commands.map((c) => c(context)));
 }
 
 // This method is called when your extension is deactivated
