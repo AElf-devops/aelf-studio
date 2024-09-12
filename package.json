@@ -10,10 +10,17 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "browser": "./dist/web/extension.js",
   "contributes": {
     "commands": [
+      {
+        "command": "aelf-contract-build.showMenu",
+        "title": "Show Menu",
+        "category": "aelf"
+      },
       {
         "command": "aelf-contract-build.build",
         "title": "Build aelf smart contract...",

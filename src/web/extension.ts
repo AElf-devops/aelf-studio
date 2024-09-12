@@ -7,6 +7,7 @@ import { faucet } from "./faucet";
 import { checkStatus } from "./check-status";
 import { test } from "./test";
 import { deployFromLocal } from "./deploy-from-local";
+import { menu } from "./menu";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -17,6 +18,18 @@ export function activate(context: vscode.ExtensionContext) {
     'Congratulations, your extension "aelf-contract-build" is now active in the web extension host!'
   );
 
+  // Add status bar item
+  const statusBarItem = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Right,
+    100
+  );
+  statusBarItem.command = "aelf-contract-build.showMenu";
+  statusBarItem.text = "$(rocket) aelf";
+  statusBarItem.tooltip = "Show aelf Contract Build Menu";
+  statusBarItem.show();
+
+  context.subscriptions.push(statusBarItem);
+
   const commands = [
     build(context),
     test(context),
@@ -24,6 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
     deployFromLocal(context),
     faucet(context),
     checkStatus(context),
+    menu(context),
   ];
 
   context.subscriptions.push(...commands);

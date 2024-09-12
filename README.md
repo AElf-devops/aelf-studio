@@ -33,6 +33,9 @@ The extension contributes the following commands:
 
 ## Usage
 
+> [!TIP]
+> Click the `aelf` icon in the status bar to open a custom menu with various actions.
+
 1. **Build Smart Contract**: Run the `aelf-contract-build.build` command.
 2. **Test Smart Contract**: Use the `aelf-contract-build.test` command to run tests on your smart contract.
 3. **Deploy Smart Contract**: Deploy your smart contract using the `aelf-contract-build.deploy` or `aelf-contract-build.deployFromLocal` commands.
