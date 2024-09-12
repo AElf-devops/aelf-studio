@@ -43,7 +43,6 @@ export const menu = (_context: vscode.ExtensionContext) =>
     });
 
     if (selection) {
-      vscode.window.showInformationMessage(`You selected: ${selection.label}`);
       // Add logic to handle each selection
       switch (selection.label) {
         case "$(tools) Build Smart Contract":
