@@ -9,7 +9,13 @@ export const deploy = (context: vscode.ExtensionContext) =>
     const responseContent = context.globalState.get("response");
 
     if (!responseContent) {
-      vscode.window.showInformationMessage("No build response found.");
+      vscode.window
+        .showInformationMessage("No build response found.", "Build")
+        .then((selection) => {
+          if (selection === "Build") {
+            vscode.commands.executeCommand("aelf-contract-build.build");
+          }
+        });
       return;
     }
 
