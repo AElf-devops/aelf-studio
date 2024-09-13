@@ -54,11 +54,18 @@ export const checkProposalStatus = (context: vscode.ExtensionContext) =>
               "aelf-contract-build.checkContractAddress"
             );
           } catch (error) {
-            const result = error as { Error?: string };
-
-            vscode.window.showErrorMessage(
-              `Error checking transaction status: ${result.Error}`
-            );
+            vscode.window
+              .showErrorMessage(
+                `Contract has not been released yet.`,
+                "Check again"
+              )
+              .then((selection) => {
+                if (selection === "Check again") {
+                  vscode.commands.executeCommand(
+                    "aelf-contract-build.checkProposalStatus"
+                  );
+                }
+              });
           }
         }
       );
