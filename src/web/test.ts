@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import { zipSync, strToU8 } from "fflate";
+import { PLAYGROUND_URL } from "./common";
 
 export const test = (context: vscode.ExtensionContext) =>
   vscode.commands.registerCommand("aelf-contract-build.test", async () => {
@@ -96,7 +97,7 @@ export const test = (context: vscode.ExtensionContext) =>
       formData.append("contractFiles", zipBlob, "files.zip");
 
       // Define the endpoint where the POST request will be sent
-      const endpoint = "https://playground-next.test.aelf.dev/playground/test"; // Replace with your actual endpoint
+      const endpoint = `${PLAYGROUND_URL}/playground/test`;
 
       vscode.window.withProgress(
         {

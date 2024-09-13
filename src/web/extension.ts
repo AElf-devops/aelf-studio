@@ -8,6 +8,8 @@ import { checkStatus } from "./check-status";
 import { test } from "./test";
 import { deployFromLocal } from "./deploy-from-local";
 import { menu } from "./menu";
+import { checkProposalStatus } from "./check-proposal-status";
+import { checkContractAddress } from "./check-contract-address";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -38,6 +40,8 @@ export function activate(context: vscode.ExtensionContext) {
     faucet,
     checkStatus,
     menu,
+    checkProposalStatus,
+    checkContractAddress,
   ];
 
   context.subscriptions.push(...commands.map((c) => c(context)));

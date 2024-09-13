@@ -1,9 +1,4 @@
 import * as vscode from "vscode";
-import AElf from "aelf-sdk";
-
-const aelf = new AElf(
-  new AElf.providers.HttpProvider("https://tdvw-test-node.aelf.io")
-);
 
 export const deployFromLocal = (context: vscode.ExtensionContext) =>
   vscode.commands.registerCommand(

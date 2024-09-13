@@ -1,14 +1,14 @@
 import * as vscode from "vscode";
 import { getLogs, aelf, AELFSCAN_URL } from "./common";
 
-export const checkStatus = (context: vscode.ExtensionContext) =>
+export const checkContractAddress = (context: vscode.ExtensionContext) =>
   vscode.commands.registerCommand(
-    "aelf-contract-build.checkStatus",
+    "aelf-contract-build.checkContractAddress",
     async () => {
       // The code you place here will be executed every time your command is executed
-      const transactionId = context.globalState.get("transactionId");
+      const releasedTxId = context.globalState.get("releasedTxId");
 
-      if (!transactionId) {
+      if (!releasedTxId) {
         vscode.window
           .showErrorMessage("No transaction ID found.", "Deploy contract")
           .then((selection) => {
@@ -27,49 +27,50 @@ export const checkStatus = (context: vscode.ExtensionContext) =>
         },
         async () => {
           try {
-            if (typeof transactionId !== "string") return;
+            if (typeof releasedTxId !== "string") return;
 
-            const result = await aelf.chain.getTxResult(transactionId);
+            const result = await aelf.chain.getTxResult(releasedTxId);
 
             if (result.Status !== "MINED") {
               vscode.window
                 .showInformationMessage(
                   `Transaction status: ${result.Status}`,
-                  "View on aelfScan",
                   "Check again"
                 )
                 .then((selection) => {
-                  if (selection === "View on aelfScan") {
-                    vscode.env.openExternal(
-                      vscode.Uri.parse(
-                        `${AELFSCAN_URL}/tx/${transactionId}`
-                      )
-                    );
-                  }
                   if (selection === "Check again") {
                     vscode.commands.executeCommand(
-                      "aelf-contract-build.checkStatus"
+                      "aelf-contract-build.checkContractAddress"
                     );
                   }
                 });
             } else {
-              const logs = await getLogs(transactionId);
+              const logs = await getLogs(releasedTxId);
 
-              const proposalId = logs.proposalId;
+              const deployedContractAddress = logs.address;
 
-              if (!!proposalId) {
-                context.globalState.update("proposalId", proposalId);
+              if (!!deployedContractAddress) {
+                context.globalState.update(
+                  "deployedContractAddress",
+                  deployedContractAddress
+                );
 
                 vscode.window
                   .showInformationMessage(
-                    `Proposal ID: ${proposalId}`,
-                    "Check proposal status"
+                    `Deployed contract address: ${deployedContractAddress}`,
+                    "View on aelf Scan",
+                    "Copy"
                   )
                   .then((selection) => {
-                    if (selection === "Check proposal status") {
-                      vscode.commands.executeCommand(
-                        "aelf-contract-build.checkProposalStatus"
+                    if (selection === "View on aelf Scan") {
+                      vscode.env.openExternal(
+                        vscode.Uri.parse(
+                          `${AELFSCAN_URL}/address/${deployedContractAddress}`
+                        )
                       );
+                    }
+                    if (selection === "Copy") {
+                      vscode.env.clipboard.writeText(deployedContractAddress);
                     }
                   });
               }

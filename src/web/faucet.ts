@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import AElf from "aelf-sdk";
+import { AElf } from "./common";
 
 export const faucet = (context: vscode.ExtensionContext) =>
   vscode.commands.registerCommand("aelf-contract-build.faucet", async () => {
