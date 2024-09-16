@@ -50,6 +50,10 @@
         "command": "aelf-contract-build.checkStatus",
         "title": "Check status of transaction...",
         "category": "aelf"
+      },
+      {
+        "command": "aelf-contract-build.showHelloWorld",
+        "title": "Hello World (React + Vite): Show"
       }
     ]
   },
@@ -66,7 +70,10 @@
     "lint": "eslint src",
     "run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ./hello-world",
     "deploy": "vsce publish",
-    "prepare": "husky"
+    "prepare": "husky",
+    "install:all": "npm install && cd webview-ui && npm install",
+    "start:webview": "cd webview-ui && npm run dev",
+    "build:webview": "cd webview-ui && npm run build"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.4.1",

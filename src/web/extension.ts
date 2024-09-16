@@ -10,6 +10,7 @@ import { deployFromLocal } from "./deploy-from-local";
 import { menu } from "./menu";
 import { checkProposalStatus } from "./check-proposal-status";
 import { checkContractAddress } from "./check-contract-address";
+import { HelloWorldPanel } from "../panels/HelloWorldPanel";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -45,6 +46,15 @@ export function activate(context: vscode.ExtensionContext) {
   ];
 
   context.subscriptions.push(...commands.map((c) => c(context)));
+
+
+   // Create the show hello world command
+   const showHelloWorldCommand = vscode.commands.registerCommand("aelf-contract-build.showHelloWorld", () => {
+    HelloWorldPanel.render(context.extensionUri);
+  });
+
+  // Add command to the extension context
+  context.subscriptions.push(showHelloWorldCommand);
 }
 
 // This method is called when your extension is deactivated
