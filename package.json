@@ -50,6 +50,11 @@
         "command": "aelf-contract-build.checkStatus",
         "title": "Check status of transaction...",
         "category": "aelf"
+      },
+      {
+        "command": "aelf-contract-build.openContractViewer",
+        "title": "Open contract viewer...",
+        "category": "aelf"
       }
     ]
   },
