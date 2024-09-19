@@ -32,3 +32,5 @@ export async function getLogs(transactionId: string) {
 
 export const PLAYGROUND_URL = "https://playground-next.test.aelf.dev";
 export const AELFSCAN_URL = "https://testnet.aelfscan.io/tDVW";
+
+export const AUDIT_CONTRACT_ADDRESS = "ASh2Wt7nSEmYqnGxPPzp4pnVDU4uhj1XW9Se5VeZcX2UDdyjx";
