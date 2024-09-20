@@ -1,13 +1,19 @@
 {
 	"compilerOptions": {
-		"module": "Node16",
+		// "module": "Node16",
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
+		"allowImportingTsExtensions": true,
+		"noEmit": true,
+		"jsx": "react-jsx",
 		"target": "ES2020",
 		"outDir": "dist",
 		"lib": [
+			"dom",
 			"ES2020", "WebWorker"
 		],
 		"sourceMap": true,
-		"rootDir": "src",
+		"rootDir": "./",
 		"skipLibCheck": true,
 		"strict": true   /* enable all strict type-checking options */
 		/* Additional Checks */
