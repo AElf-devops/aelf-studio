@@ -1,1 +1,1 @@
-{"root":["./src/App.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/utilities/vscode.ts"],"version":"5.6.2"}
+{"root":["./src/app.tsx","./src/common.ts","./src/main.tsx","./src/vite-env.d.ts","./src/components/normalformitem.tsx","./src/components/rpc.tsx","./src/utilities/vscode.ts"],"version":"5.6.2"}

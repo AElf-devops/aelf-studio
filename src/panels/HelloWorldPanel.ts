@@ -1,4 +1,4 @@
-import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vscode";
+import { Disposable,Webview,WebviewPanel,window,Uri,ViewColumn } from "vscode";
 import { getUri } from "../utilities/getUri";
 import { getNonce } from "../utilities/getNonce";
 
@@ -23,15 +23,15 @@ export class HelloWorldPanel {
    * @param panel A reference to the webview panel
    * @param extensionUri The URI of the directory containing the extension
    */
-  private constructor(panel: WebviewPanel, extensionUri: Uri) {
+  private constructor(panel: WebviewPanel,extensionUri: Uri) {
     this._panel = panel;
 
     // Set an event listener to listen for when the panel is disposed (i.e. when the user closes
     // the panel or when the panel is closed programmatically)
-    this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
+    this._panel.onDidDispose(() => this.dispose(),null,this._disposables);
 
     // Set the HTML content for the webview panel
-    this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri);
+    this._panel.webview.html = this._getWebviewContent(this._panel.webview,extensionUri);
 
     // Set an event listener to listen for messages passed from the webview context
     this._setWebviewMessageListener(this._panel.webview);
@@ -61,11 +61,11 @@ export class HelloWorldPanel {
           // Enable JavaScript in the webview
           enableScripts: true,
           // Restrict the webview to only load resources from the `out` and `webview-ui/build` directories
-          localResourceRoots: [Uri.joinPath(extensionUri, "out"), Uri.joinPath(extensionUri, "webview-ui/build")],
+          localResourceRoots: [Uri.joinPath(extensionUri,"out"),Uri.joinPath(extensionUri,"webview-ui/build")],
         }
       );
 
-      HelloWorldPanel.currentPanel = new HelloWorldPanel(panel, extensionUri);
+      HelloWorldPanel.currentPanel = new HelloWorldPanel(panel,extensionUri);
     }
   }
 
@@ -98,22 +98,22 @@ export class HelloWorldPanel {
    * @returns A template string literal containing the HTML that should be
    * rendered within the webview panel
    */
-  private _getWebviewContent(webview: Webview, extensionUri: Uri) {
+  private _getWebviewContent(webview: Webview,extensionUri: Uri) {
     // The CSS file from the React build output
-    const stylesUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.css"]);
+    const stylesUri = getUri(webview,extensionUri,["webview-ui","build","assets","index.css"]);
     // The JS file from the React build output
-    const scriptUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.js"]);
+    const scriptUri = getUri(webview,extensionUri,["webview-ui","build","assets","index.js"]);
 
     const nonce = getNonce();
-
     // Tip: Install the es6-string-html VS Code extension to enable code highlighting below
+    //  < meta http - equiv="Content-Security-Policy" content = "default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';" >
     return /*html*/ `
       <!DOCTYPE html>
       <html lang="en">
         <head>
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+          <meta http-equiv="Content-Security-Policy" script-src 'nonce-${nonce}';">
           <link rel="stylesheet" type="text/css" href="${stylesUri}">
           <title>Hello World</title>
         </head>
@@ -142,7 +142,7 @@ export class HelloWorldPanel {
           case "hello":
             // Code that should run in response to the hello message command
             window.showInformationMessage(text);
-            
+
             return;
           // Add more switch case statements here as more webview message commands
           // are created within the webview context (i.e. inside media/main.js)

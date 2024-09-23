@@ -1,10 +1,12 @@
 import React from 'react';
 import { vscode } from "./utilities/vscode";
-import {createComponent} from '@lit/react';
-import {VscodeButton} from "@vscode-elements/elements/dist/vscode-button/index.js";
-import "./App.css";
+import { createComponent } from '@lit/react';
+import { VscodeButton } from "@vscode-elements/elements/dist/vscode-button/index.js";
+import "./index.css";
+import RPCBlock from './components/rpc';
 
-export const Button = createComponent({
+
+export const VSCodeButton = createComponent({
   tagName: 'vscode-button',
   elementClass: VscodeButton,
   react: React,
@@ -13,7 +15,6 @@ export const Button = createComponent({
     onchange: 'change',
   },
 });
-
 function App() {
   function handleBuild() {
     vscode.postMessage({
@@ -22,10 +23,11 @@ function App() {
     });
   }
 
+
   return (
     <main>
-      <h1>Welcome to aelf Studio</h1>
-      <Button onClick={handleBuild}>Build</Button>
+      <header className='flex justify-center w-full py-4 text-[16px] font-bold align-middle border-b-2'>Contract View</header>
+      <RPCBlock></RPCBlock>
     </main>
   );
 }
