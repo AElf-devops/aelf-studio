@@ -52,9 +52,15 @@
         "category": "aelf"
       },
       {
+        "command": "aelf-contract-build.audit",
+        "title": "Audit aelf smart contract...",
+        "category": "aelf"
+      },
+      {
         "command": "aelf-contract-build.showHelloWorld",
-        "title": "Hello World (React + Vite): Show"
-      }
+         "title": "Hello World (React + Vite): Show",
+         "category": "aelf"
+       }
     ]
   },
   "scripts": {

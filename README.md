@@ -30,6 +30,7 @@ The extension contributes the following commands:
 - `aelf-contract-build.deployFromLocal`: Deploy aelf smart contract from a local DLL...
 - `aelf-contract-build.faucet`: Get testnet tokens from faucet...
 - `aelf-contract-build.checkStatus`: Check status of transaction...
+- `aelf-contract-build.audit`: Audit aelf smart contract...
 
 ## Usage
 
@@ -41,6 +42,7 @@ The extension contributes the following commands:
 3. **Deploy Smart Contract**: Deploy your smart contract using the `aelf-contract-build.deploy` or `aelf-contract-build.deployFromLocal` commands.
 4. **Get Testnet Tokens**: Use the `aelf-contract-build.faucet` command to get testnet tokens.
 5. **Check Transaction Status**: Use the `aelf-contract-build.checkStatus` command to check the status of your most recently deployed contract.
+6. **Audit Smart Contract**: Run the `aelf-contract-build.audit` command to audit your smart contract.
 
 ## Installation
 
