@@ -97,7 +97,10 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@portkey/contracts": "^2.10.6-alpha.1",
     "aelf-sdk": "^3.4.15",
-    "fflate": "^0.8.2"
+    "clsx": "^2.1.1",
+    "fflate": "^0.8.2",
+    "react-json-view": "^1.21.3"
   }
 }
