@@ -112,8 +112,11 @@ export default function ValueFormItem({
   const handleMenuClick: Required<MenuProps>['onClick'] = useCallback((e) => {
     if (e.key !== 'input') {
       const [, log] = e.key.split(',');
-      setValue(1 + '0'.repeat(log));
-      setCustomValueView(log);
+      const logNumber = parseInt(log);
+      if (!isNaN(logNumber)) {
+        setValue(1 + '0'.repeat(logNumber));
+        setCustomValueView(log);
+      }
     }
   }, []);
   const label = useMemo(() => {
