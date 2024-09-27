@@ -23,6 +23,10 @@ export const menu = (_context: vscode.ExtensionContext) =>
         label: "$(check) Check Transaction Status",
         description: "Check status of transaction",
       },
+      {
+        label: "$(network) AI Audit",
+        description: "Audit the smart contract using AI",
+      }
     ];
 
     const isDesktop = vscode.env.uiKind === vscode.UIKind.Desktop;
@@ -57,6 +61,9 @@ export const menu = (_context: vscode.ExtensionContext) =>
           break;
         case "$(file) Deploy from Local":
           vscode.commands.executeCommand("aelf-contract-build.deployFromLocal");
+          break;
+        case "$(network) AI Audit":
+          vscode.commands.executeCommand("aelf-contract-build.audit");
           break;
       }
     }

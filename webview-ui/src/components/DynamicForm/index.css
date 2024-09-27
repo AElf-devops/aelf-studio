@@ -1,0 +1,68 @@
+.wallet-address {
+  @apply text-xs leading-5;
+  a {
+    @apply text-xs leading-5;
+  }
+}
+
+.contract-collapse-container{
+  .ant-collapse {
+    @apply !border-color-divider bg-F7;
+  }
+  .ant-collapse-item {
+    @apply !border-color-divider;
+  }
+  .ant-collapse-header {
+    @apply  !px-3 !py-1 !items-center;
+  }
+  .ant-collapse-header-text {
+    @apply text-xs leading-5 text-base-100 flex-1 min-w-0 mr-1;
+  }
+  .ant-collapse-content {
+    @apply !border-color-divider;
+  }
+  .ant-collapse-expand-icon {
+    padding-inline-start: 16px;
+  }
+  .arrow {
+    transition: transform 0.3s;
+  }
+  .ant-collapse-content-box {
+    @apply px-3 pt-2 pb-4;
+  }
+}
+
+.ant-form-item {
+  @apply mb-3;
+}
+
+.menu-label {
+  @apply text-xs leading-5 text-base-100;
+  .min {
+    vertical-align: super;
+    font-size: 10px;
+    zoom: 0.8;
+  }
+}
+.show-count {
+  @apply text-xs leading-5 text-base-100;
+  .min {
+    vertical-align: super;
+    font-size: 10px;
+    zoom: 0.8;
+  }
+}
+
+.menu-container {
+  .ant-dropdown-menu .ant-dropdown-menu-item:hover {
+    @apply !bg-F7;
+  }
+}
+
+.logout-warpper {
+  &:hover {
+    svg {
+      @apply text-link ;
+    }
+  }
+}

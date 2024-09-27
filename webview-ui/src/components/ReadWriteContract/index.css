@@ -1,0 +1,12 @@
+.contract-container {
+  width: 100%;
+  .contract-button-link {
+    @apply block bg-ECEEF2 rounded-md px-2 py-[2px] text-xs leading-5 font-medium !text-base-100 hover:bg-[#dee2e6];
+
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+      border-color 0.15s ease-in-out;
+  }
+  .active-button-link {
+    @apply bg-link !text-white hover:bg-link;
+  }
+}
