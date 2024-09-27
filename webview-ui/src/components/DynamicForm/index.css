@@ -6,33 +6,33 @@
 }
 
 .contract-collapse-container{
-  .explorer-collapse {
+  .ant-collapse {
     @apply !border-color-divider bg-F7;
   }
-  .explorer-collapse-item {
+  .ant-collapse-item {
     @apply !border-color-divider;
   }
-  .explorer-collapse-header {
+  .ant-collapse-header {
     @apply  !px-3 !py-1 !items-center;
   }
-  .explorer-collapse-header-text {
+  .ant-collapse-header-text {
     @apply text-xs leading-5 text-base-100 flex-1 min-w-0 mr-1;
   }
-  .explorer-collapse-content {
+  .ant-collapse-content {
     @apply !border-color-divider;
   }
-  .explorer-collapse-expand-icon {
+  .ant-collapse-expand-icon {
     padding-inline-start: 16px;
   }
   .arrow {
     transition: transform 0.3s;
   }
-  .explorer-collapse-content-box {
+  .ant-collapse-content-box {
     @apply px-3 pt-2 pb-4;
   }
 }
 
-.explorer-form-item {
+.ant-form-item {
   @apply mb-3;
 }
 
@@ -54,7 +54,7 @@
 }
 
 .menu-container {
-  .explorer-dropdown-menu .explorer-dropdown-menu-item:hover {
+  .ant-dropdown-menu .ant-dropdown-menu-item:hover {
     @apply !bg-F7;
   }
 }

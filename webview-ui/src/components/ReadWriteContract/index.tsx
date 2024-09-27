@@ -10,6 +10,7 @@ interface IReadWriteContractProps {
   writeMethods: IMethod[];
   contract: any;
   wallet?: IWalletInfo;
+  disabled: boolean;
 }
 
 enum ItemKey {
@@ -22,6 +23,7 @@ export default function ReadWriteContract({
   writeMethods,
   contract,
   wallet,
+  disabled,
 }: IReadWriteContractProps) {
   const [activeKey, setActiveKey] = useState(ItemKey.READ_CONTRACT);
 
@@ -36,10 +38,10 @@ export default function ReadWriteContract({
         label: 'Read Contract',
         children: (
           <DynamicForm
-            activeKey={activeKey}
             methods={readMethods}
             contract={contract}
             wallet={wallet}
+            disabled={disabled}
           />
         ),
       },
@@ -48,15 +50,15 @@ export default function ReadWriteContract({
         label: 'Write Contract',
         children: (
           <DynamicForm
-            activeKey={activeKey}
             methods={writeMethods}
             contract={contract}
             wallet={wallet}
+            disabled={disabled}
           />
         ),
       },
     ];
-  }, [contract, readMethods, writeMethods, activeKey, wallet]);
+  }, [contract, readMethods, writeMethods, wallet, disabled]);
 
   return (
     <div className="contract-container">

@@ -15,9 +15,11 @@ export default function FormItem({
   type,
   contract,
   wallet,
+  disabled,
 }: IMethod & {
   contract: any;
   wallet?: IWalletInfo;
+  disabled: boolean;
 }) {
   const [form] = Form.useForm();
   const [res, setRes] = useState<any>('');
@@ -96,10 +98,11 @@ export default function FormItem({
               type={ele.type}
               key={ele.name}
               data={ele}
+              disabled={disabled}
             />
           ) : (
             <Form.Item key={ele.name} label={ele.name} name={ele.name}>
-              <Input size="small" />
+              <Input size="small" disabled={disabled} />
             </Form.Item>
           ),
         )}
@@ -110,7 +113,7 @@ export default function FormItem({
                 type="primary"
                 size="small"
                 className="mr-3 bg-link"
-                disabled={!submittable && !!input.length}
+                disabled={disabled || (!submittable && !!input.length)}
                 loading={loading}
                 onClick={query}
               >
@@ -121,7 +124,9 @@ export default function FormItem({
               <Button
                 size="small"
                 className="bg-link"
-                disabled={!wallet || (!submittable && !!input.length)}
+                disabled={
+                  disabled || !wallet || (!submittable && !!input.length)
+                }
                 loading={writeLoading}
                 type="primary"
                 onClick={write}

@@ -183,7 +183,7 @@ function App() {
       <header className="flex justify-center w-full py-4 text-[16px] font-bold align-middle border-b-2">
         Contract View
       </header>
-      <div className="flex flex-col gap-6 p-4">
+      <div className="flex flex-col gap-6 p-4 w-full">
         <NormalFormItem
           options={rpcOptions}
           selectedItem={rpc}
@@ -207,6 +207,7 @@ function App() {
           writeMethods={writeMethods}
           contract={contract}
           wallet={wallet}
+          disabled={isGettingContractRef.current}
         />
       </div>
     </main>

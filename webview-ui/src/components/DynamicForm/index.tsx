@@ -13,13 +13,13 @@ import './index.css';
 export default function DynamicForm({
   methods,
   contract,
-  activeKey,
   wallet,
+  disabled,
 }: {
   methods: IMethod[];
   contract: any;
-  activeKey: string;
   wallet?: IWalletInfo;
+  disabled: boolean;
 }) {
   const handleCopy = (value: string) => {
     message.destroy();
@@ -88,23 +88,6 @@ export default function DynamicForm({
                             }}
                           />
                         </EPTooltip>
-                        <EPTooltip
-                          mode="dark"
-                          placement="top"
-                          title="Copy Permalink"
-                        >
-                          <IconFont
-                            type="link"
-                            onClick={() => {
-                              handleCopy(
-                                window.location.href +
-                                  `&type=${activeKey}` +
-                                  '#' +
-                                  item.name,
-                              );
-                            }}
-                          />
-                        </EPTooltip>
                       </div>
                     ),
                     children: (
@@ -115,7 +98,8 @@ export default function DynamicForm({
                         name={item.name}
                         input={item.input}
                         fn={item.fn}
-                      ></FormItem>
+                        disabled={disabled}
+                      />
                     ),
                   },
                 ]}

@@ -11,10 +11,12 @@ export default function ValueFormItem({
   data,
   form,
   type,
+  disabled,
 }: {
   data: IInputItem;
   form: any;
   type: string;
+  disabled: boolean;
 }) {
   const [value, setValue] = useState('');
 
@@ -160,7 +162,7 @@ export default function ValueFormItem({
   }, [customValueView, data.name, form, handleMenuClick, items, type, value]);
   return (
     <Form.Item key={data.name} label={label} name={data.name}>
-      <Input size="small" />
+      <Input size="small" disabled={disabled} />
     </Form.Item>
   );
 }
