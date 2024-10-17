@@ -13,6 +13,7 @@
   "activationEvents": [
     "onStartupFinished"
   ],
+  "icon": "images/icon.png",
   "browser": "./dist/web/extension.js",
   "contributes": {
     "commands": [
@@ -58,9 +59,9 @@
       },
       {
         "command": "aelf-contract-build.showHelloWorld",
-         "title": "Hello World (React + Vite): Show",
-         "category": "aelf"
-       }
+        "title": "Hello World (React + Vite): Show",
+        "category": "aelf"
+      }
     ]
   },
   "scripts": {
