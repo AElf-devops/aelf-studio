@@ -12,24 +12,9 @@ export const faucet = (context: vscode.ExtensionContext) =>
       privateKey = newWallet.privateKey;
       context.globalState.update("privateKey", privateKey);
 
-      vscode.window.withProgress(
-        {
-          location: vscode.ProgressLocation.Notification,
-          title: "Claiming testnet tokens...",
-          cancellable: false,
-        },
-        async () => {
-          const res = await fetch(
-            `https://faucet.aelf.dev/api/claim?walletAddress=${newWallet.address}`,
-            { method: "POST" }
-          );
-
-          await res.json();
-
-          vscode.window.showInformationMessage(
-            "Testnet tokens claimed successfully."
-          );
-        }
+      // open a new tab in the browser
+      vscode.env.openExternal(
+        vscode.Uri.parse(`https://faucet-ui.aelf.dev?address=${newWallet.address}`)
       );
     } else {
       vscode.window
