@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import { PLAYGROUND_URL } from "./common";
 
 export const checkProposalStatus = (context: vscode.ExtensionContext) =>
   vscode.commands.registerCommand(
@@ -28,7 +27,7 @@ export const checkProposalStatus = (context: vscode.ExtensionContext) =>
         async () => {
           try {
             const res = await fetch(
-              `${PLAYGROUND_URL}/api/get-proposal-info?id=${proposalId}`
+              `https://test.tmrwdao.com/side-explorer-api/proposal/proposalInfo?proposalId=${proposalId}`
             );
             const { data }: { data: Data } = await res.json();
 
@@ -72,63 +71,51 @@ export const checkProposalStatus = (context: vscode.ExtensionContext) =>
     }
   );
 
-interface Data {
-  proposal: Proposal;
-  bpList: string[];
-  organization: Organization;
-  parliamentProposerList: any[];
-}
-
-interface Proposal {
-  createAt: string;
-  expiredTime: string;
-  approvals: number;
-  rejections: number;
-  abstentions: number;
-  leftInfo: LeftInfo;
-  releasedTime: string;
-  id: number;
-  orgAddress: string;
-  createTxId: string;
-  proposalId: string;
-  proposer: string;
-  contractAddress: string;
-  contractMethod: string;
-  contractParams: string;
-  status: string;
-  releasedTxId: string;
-  createdBy: string;
-  isContractDeployed: boolean;
-  proposalType: string;
-  canVote: boolean;
-  votedStatus: string;
-}
-
-interface LeftInfo {
-  organizationAddress: string;
-}
-
-interface Organization {
-  createdAt: string;
-  updatedAt: string;
-  releaseThreshold: ReleaseThreshold;
-  leftOrgInfo: LeftOrgInfo;
-  orgAddress: string;
-  orgHash: string;
-  txId: string;
-  creator: string;
-  proposalType: string;
-}
-
-interface ReleaseThreshold {
-  minimalApprovalThreshold: string;
-  maximalRejectionThreshold: string;
-  maximalAbstentionThreshold: string;
-  minimalVoteThreshold: string;
-}
-
-interface LeftOrgInfo {
-  proposerAuthorityRequired: boolean;
-  parliamentMemberProposingAllowed: boolean;
-  creationToken: any;
-}
+export type Data = {
+  proposal: {
+    createAt: string;
+    expiredTime: string;
+    approvals: number;
+    rejections: number;
+    abstentions: number;
+    leftInfo: {};
+    releasedTime: string;
+    id: number;
+    orgAddress: string;
+    createTxId: string;
+    proposalId: string;
+    proposer: string;
+    contractAddress: string;
+    contractMethod: string;
+    contractParams: string;
+    status: string;
+    releasedTxId: string;
+    createdBy: string;
+    isContractDeployed: boolean;
+    proposalType: string;
+    canVote: boolean;
+    votedStatus: string;
+  };
+  bpList: Array<string>;
+  organization: {
+    createdAt: string;
+    updatedAt: string;
+    releaseThreshold: {
+      minimalApprovalThreshold: string;
+      maximalRejectionThreshold: string;
+      maximalAbstentionThreshold: string;
+      minimalVoteThreshold: string;
+    };
+    leftOrgInfo: {
+      proposerAuthorityRequired: boolean;
+      parliamentMemberProposingAllowed: boolean;
+      creationToken: any;
+    };
+    orgAddress: string;
+    orgHash: string;
+    txId: string;
+    creator: string;
+    proposalType: string;
+  };
+  parliamentProposerList: Array<any>;
+};
