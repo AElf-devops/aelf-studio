@@ -62,6 +62,11 @@ export const build = (context: vscode.ExtensionContext) =>
       // Loop through all files and get their content, then add them to the zip
       for (const fileUri of fileUris) {
         try {
+          // Skip bin and obj folders
+          if (fileUri.path.includes("bin/") || fileUri.path.includes("obj/")) {
+            continue;
+          }
+
           const document = await vscode.workspace.openTextDocument(fileUri);
           const content = document.getText();
 
