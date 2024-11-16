@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { PLAYGROUND_URL } from "./common";
 
 export const checkProposalStatus = (context: vscode.ExtensionContext) =>
   vscode.commands.registerCommand(
@@ -27,9 +28,10 @@ export const checkProposalStatus = (context: vscode.ExtensionContext) =>
         async () => {
           try {
             const res = await fetch(
-              `https://test.tmrwdao.com/side-explorer-api/proposal/proposalInfo?proposalId=${proposalId}`
+              `${PLAYGROUND_URL}/api/get-proposal-info?id=${proposalId}`
             );
             const { data }: { data: Data } = await res.json();
+            console.log(data);
 
             if (data.proposal.status !== "released") {
               vscode.window
@@ -53,6 +55,7 @@ export const checkProposalStatus = (context: vscode.ExtensionContext) =>
               "aelf-contract-build.checkContractAddress"
             );
           } catch (error) {
+            console.log(error);
             vscode.window
               .showErrorMessage(
                 `Contract has not been released yet.`,
