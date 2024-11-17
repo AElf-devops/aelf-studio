@@ -105,7 +105,12 @@ export const build = (context: vscode.ExtensionContext) =>
             if (response.ok) {
               const responseContent = await response.text();
               if (responseContent.includes("Determining projects to restore")) {
-                throw new Error(responseContent);
+                // Detect and remove the dynamic path
+                const cleanedString = responseContent.replace(
+                  /\/tmp\/[a-f0-9\-]+\//g,
+                  ""
+                );
+                throw new Error(cleanedString);
               }
               context.globalState.update("response", responseContent);
 
@@ -132,6 +137,7 @@ export const build = (context: vscode.ExtensionContext) =>
                 "Build Error"
               );
               outputChannel.appendLine(error.message);
+              outputChannel.show();
             }
           }
         }
