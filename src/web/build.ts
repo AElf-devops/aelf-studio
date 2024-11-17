@@ -104,6 +104,9 @@ export const build = (context: vscode.ExtensionContext) =>
 
             if (response.ok) {
               const responseContent = await response.text();
+              if (responseContent.includes("Determining projects to restore")) {
+                throw new Error(responseContent);
+              }
               context.globalState.update("response", responseContent);
 
               vscode.window
@@ -123,6 +126,12 @@ export const build = (context: vscode.ExtensionContext) =>
               vscode.window.showErrorMessage(
                 `Error: There was a problem building your contract, please check your code.`
               );
+
+              // display the error message in the output channel
+              const outputChannel = vscode.window.createOutputChannel(
+                "Build Error"
+              );
+              outputChannel.appendLine(error.message);
             }
           }
         }
