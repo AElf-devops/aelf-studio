@@ -52,7 +52,7 @@ async function openRecaptchaWebview(
         } else if (message.error) {
           // Show a detailed error message
           vscode.window.showErrorMessage(
-            `${message.error}\n\nPossible reasons: \n - Network issues (ensure stable internet connection).\n - Google services are blocked in your region (e.g., China).\n`
+            `${message.error}\n\nPossible reasons: \n - Network issues (ensure stable internet connection).\n - Google services are blocked in your region.\n`
           );
           reject(new Error(message.error));
           panel.dispose();
