@@ -10,16 +10,20 @@ function getRecaptchaWebviewContent(siteKey: string): string {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>reCAPTCHA</title>
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <script src="https://www.google.com/recaptcha/api.js" async defer onerror="onLoadError()"></script>
       </head>
       <body>
         <h2>Please complete the CAPTCHA to proceed:</h2>
         <div class="g-recaptcha" data-sitekey="${siteKey}" data-callback="onRecaptchaSuccess"></div>
         <script>
           function onRecaptchaSuccess(token) {
-            const vscode = acquireVsCodeApi();
-            vscode.postMessage({ recaptchaToken: token });
+           const vscode = acquireVsCodeApi();
+           vscode.postMessage({ recaptchaToken: token });
           }
+          function onLoadError() {
+            const vscode = acquireVsCodeApi();
+            vscode.postMessage({ error: "Recaptcha failed to load."});
+          }            
         </script>
       </body>
     </html>
@@ -39,11 +43,18 @@ async function openRecaptchaWebview(
   );
   panel.webview.html = getRecaptchaWebviewContent(RECAPTCHA_SITE_KEY);
   // Return a promise that resolves when the reCAPTCHA token is received
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     panel.webview.onDidReceiveMessage(
       (message) => {
         if (message.recaptchaToken) {
           resolve(message.recaptchaToken);
+          panel.dispose();
+        } else if (message.error) {
+          // Show a detailed error message
+          vscode.window.showErrorMessage(
+            `${message.error}\n\nPossible reasons: \n - Network issues (ensure stable internet connection).\n - Google services are blocked in your region (e.g., China).\n`
+          );
+          reject(new Error(message.error));
           panel.dispose();
         }
       },
