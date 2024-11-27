@@ -1,8 +1,7 @@
 import * as vscode from "vscode";
 import { AElf } from "./common";
-import { RECAPTCHA_SITE_KEY } from "../utilities/googleCaptcha";
 
-function getRecaptchaWebviewContent(siteKey: string): string {
+function getRecaptchaWebviewContent(hostedUrl: string): string {
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -10,20 +9,37 @@ function getRecaptchaWebviewContent(siteKey: string): string {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>reCAPTCHA</title>
-        <script src="https://www.google.com/recaptcha/api.js" async defer onerror="onLoadError()"></script>
       </head>
       <body>
         <h2>Please complete the CAPTCHA to proceed:</h2>
-        <div class="g-recaptcha" data-sitekey="${siteKey}" data-callback="onRecaptchaSuccess"></div>
+        <iframe
+          src="${hostedUrl}"
+          width="100%"
+          height="500"
+          frameborder="0"
+          id="recaptcha-iframe"
+        ></iframe>
+        <p class="error-message" id="recaptcha-error" style="color:red;display:none;">
+          Failed to load CAPTCHA. Please check your network or region restrictions.
+        </p>
         <script>
-          function onRecaptchaSuccess(token) {
-           const vscode = acquireVsCodeApi();
-           vscode.postMessage({ recaptchaToken: token });
-          }
-          function onLoadError() {
-            const vscode = acquireVsCodeApi();
-            vscode.postMessage({ error: "Recaptcha failed to load."});
-          }            
+          const vscode = acquireVsCodeApi();
+
+          // Listen for messages from the iframe
+          window.addEventListener("message", (event) => {
+            if (event.data.recaptchaToken) {
+              vscode.postMessage({ recaptchaToken: event.data.recaptchaToken });
+            }
+          });
+
+          // Handle iframe load errors
+          const iframe = document.getElementById("recaptcha-iframe");
+          iframe.addEventListener("error", () => {
+            document.getElementById("recaptcha-error").style.display = "block";
+            vscode.postMessage({
+              error: "Failed to load CAPTCHA iframe."
+            });
+          });
         </script>
       </body>
     </html>
@@ -33,17 +49,19 @@ function getRecaptchaWebviewContent(siteKey: string): string {
 async function openRecaptchaWebview(
   context: vscode.ExtensionContext
 ): Promise<string | undefined> {
+  const hostedRecaptchaUrl = "https://faucet-ui.aelf.dev/captcha.html";
   const panel = vscode.window.createWebviewPanel(
-    "recaptcha", // Identifies the type of the webview panel
-    "Complete reCAPTCHA", // Title of the panel
-    vscode.ViewColumn.One, // Editor column to show the new webview panel in
+    "recaptcha",
+    "Complete reCAPTCHA",
+    vscode.ViewColumn.One,
     {
       enableScripts: true, // Allow scripts in the webview
     }
   );
-  panel.webview.html = getRecaptchaWebviewContent(RECAPTCHA_SITE_KEY);
-  // Return a promise that resolves when the reCAPTCHA token is received
-  return new Promise((resolve, reject) => {
+
+  panel.webview.html = getRecaptchaWebviewContent(hostedRecaptchaUrl);
+
+  return new Promise((resolve,reject) => {
     panel.webview.onDidReceiveMessage(
       (message) => {
         if (message.recaptchaToken) {
